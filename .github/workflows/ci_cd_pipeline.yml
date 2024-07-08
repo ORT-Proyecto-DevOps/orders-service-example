@@ -125,13 +125,4 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
-      - name: Create ECS Task Definition
-        id: task-def
-        run: |
-          chmod +x .github/scripts/create_task_definition.sh
-          .github/scripts/create_task_definition.sh
-        shell: bash
-        env:
-          ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-          IMAGE_TAG: ${{ inputs.IMAGE_TAG }}
+     
