@@ -1,0 +1,32 @@
+version: '3'
+services:
+  products-service:
+    build:
+      context: ./products-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+  payments-service:
+    build:
+      context: ./payments-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+  shipping-service:
+    build:
+      context: ./shipping-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+  orders-service:
+    build:
+      context: ./orders-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      APP_ARGS: "http://products-service:8080 http://payments-service:8080 http://shipping-service:8080"
+    depends_on:
+      - products-service
+      - payments-service
+      - shipping-service

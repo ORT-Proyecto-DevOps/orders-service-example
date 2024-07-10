@@ -1,0 +1,81 @@
+{
+	"info": {
+		"_postman_id": "9660c786-8908-4db3-ab46-31629f2a6263",
+		"name": "orders-collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "27682941"
+	},
+	"item": [
+		{
+			"name": "Obtener productos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/products"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener un producto",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/products/123"
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar una compra",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    \"123\", \"321\", \"111\"\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/orders"
+			},
+			"response": []
+		},
+		{
+			"name": "Ver estado de envío",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/shipping/c"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://orders-service:8080"
+		}
+	]
+}
