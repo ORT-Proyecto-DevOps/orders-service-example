@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8080"
+    networks:
+        - app-network
 
   payments-service:
     build:
@@ -13,6 +15,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8082:8080"
+    networks:
+        - app-network
 
   shipping-service:
     build:
@@ -20,6 +24,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8083:8080"
+    networks:
+        - app-network
 
   orders-service:
     build:
@@ -29,3 +35,9 @@ services:
       - "8080:8080"
     environment:
       APP_ARGS: "http://payments-service:8080 http://shipping-service:8080 http://products-service:8080"
+    networks:
+        - app-network
+
+networks:
+  app-network:
+    driver: bridge
