@@ -97,15 +97,15 @@ jobs:
 
       - name: Clone products service repository
         run: |
-          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/products-service-example.git products-service
+          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/products-service-example.git ./products-service
 
       - name: Clone payments service repository
         run: |
-          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/payments-service-example.git payments-service
+          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/payments-service-example.git ./payments-service
 
       - name: Clone shipping service repository
         run: |
-          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/shipping-service-example.git shipping-service
+          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/shipping-service-example.git ./shipping-service
 
       - name: Build and run services with Docker Compose
         run: |
