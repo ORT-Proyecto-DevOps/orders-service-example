@@ -14,6 +14,9 @@ RUN mvn -X clean package
 # Utilizamos una imagen más ligera para ejecutar la aplicación
 FROM openjdk:17-jdk-slim
 
+# Instala bash y curl
+RUN apt-get update && apt-get install -y bash curl
+
 # Copiamos el .jar generado desde la fase de compilación al contenedor final
 COPY --from=build /app/target/*.jar app.jar
 

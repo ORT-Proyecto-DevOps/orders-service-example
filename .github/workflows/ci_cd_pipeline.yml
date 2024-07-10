@@ -112,7 +112,7 @@ jobs:
           docker-compose up -d --build
 
       - name: Wait for services to start
-        run: sleep 90
+        run: sleep 30
 
       # Verifica los logs de los contenedores para depurar problemas de salud.
       - name: Check logs
