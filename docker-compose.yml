@@ -6,11 +6,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8080"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   payments-service:
     build:
@@ -18,11 +13,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8082:8080"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   shipping-service:
     build:
@@ -30,11 +20,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8083:8080"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   orders-service:
     build:
@@ -44,15 +29,3 @@ services:
       - "8080:8080"
     environment:
       APP_ARGS: "http://payments-service:8080 http://shipping-service:8080 http://products-service:8080"
-    depends_on:
-      products-service:
-        condition: service_healthy
-      payments-service:
-        condition: service_healthy
-      shipping-service:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
