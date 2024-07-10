@@ -30,3 +30,4 @@ services:
       - products-service
       - payments-service
       - shipping-service
+      
