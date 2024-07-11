@@ -89,12 +89,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-  
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
       - name: Clone products service repository
         run: |
           git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/products-service-example.git ./products-service
@@ -122,6 +116,11 @@ jobs:
       - name: Run Postman tests
         run: |
           newman run postman/orders.postman_collection.json
+      
+      # Detener y eliminar contenedores después de las pruebas
+      - name: Stop and remove Docker containers
+        run: |
+          docker-compose down
 
   push_image_ecr:
     runs-on: ubuntu-latest
