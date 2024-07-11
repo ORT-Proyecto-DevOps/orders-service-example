@@ -64,7 +64,7 @@
 	"variable": [
 		{
 			"key": "BASE_URL",
-			"value": "http://orders-service:8080",
+			"value": "http://localhost:8080",
 			"type": "string"
 		}
 	]
