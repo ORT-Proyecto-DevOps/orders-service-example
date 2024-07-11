@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "28997892-d188-412e-bc80-63fa3b270bf2",
-		"name": "Orders",
+		"_postman_id": "1e22101a-0772-463b-8086-ccd9c8a15377",
+		"name": "orders",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-		"_exporter_id": "34831820"
+		"_exporter_id": "27682941"
 	},
 	"item": [
 		{
@@ -15,7 +15,26 @@
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
-							"});"
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains orderId\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('orderId');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains success boolean\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('success');\r",
+							"    pm.expect(jsonData.success).to.be.a('boolean');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains description string\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('description');\r",
+							"    pm.expect(jsonData.description).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							""
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -27,14 +46,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n    \"123\", \"321\", \"111\"\n]",
+					"raw": "[\r\n    \"123\", \"321\", \"111\"\r\n]",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "{{BASE_URL}}/orders"
+				"url": "{{base_url}}/orders"
 			},
 			"response": []
 		}
@@ -63,7 +82,7 @@
 	],
 	"variable": [
 		{
-			"key": "BASE_URL",
+			"key": "base_url",
 			"value": "http://localhost:8080",
 			"type": "string"
 		}
