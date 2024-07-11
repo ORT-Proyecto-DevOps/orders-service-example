@@ -121,7 +121,7 @@ jobs:
 
       - name: Run Postman tests
         run: |
-          newman run postman/Orders.postman_collection.json
+          newman run postman/orders.postman_collection.json
 
   push_image_ecr:
     runs-on: ubuntu-latest
