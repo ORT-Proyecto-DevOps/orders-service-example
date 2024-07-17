@@ -93,9 +93,9 @@ jobs:
         run: |
           git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/products-service-example.git ./products-service
 
-      - name: Clone orders service repository
+      - name: Clone payments service repository
         run: |
-          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/orders-service-example.git ./orders-service
+          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/payments-service-example.git ./payments-service
 
       - name: Clone shipping service repository
         run: |
