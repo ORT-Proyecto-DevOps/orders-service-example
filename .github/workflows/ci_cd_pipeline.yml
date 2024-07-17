@@ -3,13 +3,13 @@ name: Github Action Workflow CI/CD
 on:
   workflow_call:
     inputs:
-      CI_ENV:
-        required: true
-        type: string
       IMAGE_TAG:
         required: true
         type: string
       BRANCH:
+        required: true
+        type: string
+      ENV:
         required: true
         type: string
     secrets:
@@ -93,9 +93,9 @@ jobs:
         run: |
           git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/products-service-example.git ./products-service
 
-      - name: Clone payments service repository
+      - name: Clone orders service repository
         run: |
-          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/payments-service-example.git ./payments-service
+          git clone -b ${{ inputs.BRANCH }} https://github.com/ORT-Proyecto-DevOps/orders-service-example.git ./orders-service
 
       - name: Clone shipping service repository
         run: |
@@ -168,3 +168,31 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          
+      - name: Update Task Definition
+        id: update_task_definition
+        run: |
+          TASK_DEFINITION_NAME="aws-ecs-orders-task-${{ inputs.ENV }}"
+          TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition $TASK_DEFINITION_NAME)
+          NEW_TASK_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE "${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.IMAGE_TAG }}" '.taskDefinition.containerDefinitions[0].image = $IMAGE')
+          APP_ARGS="http://aws-ecs-internal-lb-dev-1620666920.us-east-1.elb.amazonaws.com:8080/payments http://aws-ecs-internal-lb-dev-1620666920.us-east-1.elb.amazonaws.com:8080/shipping http://aws-ecs-internal-lb-dev-1620666920.us-east-1.elb.amazonaws.com:8080/products"
+          NEW_TASK_DEFINITION=$(echo $NEW_TASK_DEFINITION | jq --arg APP_ARGS "$APP_ARGS" '.taskDefinition.containerDefinitions[0].environment += [{"name": "APP_ARGS", "value": $APP_ARGS}]')
+          NEW_TASK_DEF_REVISION=$(echo $NEW_TASK_DEFINITION | jq '.taskDefinition' | jq 'del(.status,.taskDefinitionArn,.revision,.requiresAttributes,.compatibilities,.registeredAt,.registeredBy)')
+          echo "$NEW_TASK_DEF_REVISION" > new-task-def.json
+          aws ecs register-task-definition --cli-input-json file://new-task-def.json
+        
+      - name: Deploy to ECS Service
+        run: |
+          CLUSTER_NAME="aws-ecs-${{ inputs.ENV }}"
+          SERVICE_NAME="aws-ecs-orders-service-${{ inputs.ENV }}"
+          NEW_TASK_DEF_ARN=$(aws ecs describe-task-definition --task-definition aws-ecs-orders-task-${{ inputs.ENV }} | jq -r '.taskDefinition.taskDefinitionArn')
+          aws ecs update-service --cluster $CLUSTER_NAME --service $SERVICE_NAME --task-definition $NEW_TASK_DEF_ARN
+  
+      - name: Stop Old Tasks
+        run: |
+          CLUSTER_NAME="aws-ecs-${{ inputs.ENV }}"
+          SERVICE_NAME="aws-ecs-orders-service-${{ inputs.ENV }}"
+          OLD_TASKS=$(aws ecs list-tasks --cluster $CLUSTER_NAME --service-name $SERVICE_NAME --desired-status RUNNING --query "taskArns" --output text)
+          for task in $OLD_TASKS; do
+            aws ecs stop-task --cluster $CLUSTER_NAME --task $task
+          done

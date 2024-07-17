@@ -1,15 +1,18 @@
 package uy.edu.ort.devops.ordersserviceexample.endpoints;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import uy.edu.ort.devops.ordersserviceexample.domain.OrderStatus;
 import uy.edu.ort.devops.ordersserviceexample.logic.OrdersLogic;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -25,6 +28,6 @@ public class OrdersEndpoint {
 
     @GetMapping(path = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> healthCheck() {
-        return ResponseEntity.ok("{"status":"UP"}");
+        return ResponseEntity.ok("{\"status\":\"UP\"}");
     }
 }
