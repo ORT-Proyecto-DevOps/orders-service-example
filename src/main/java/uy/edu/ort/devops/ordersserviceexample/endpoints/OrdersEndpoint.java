@@ -22,4 +22,9 @@ public class OrdersEndpoint {
     public OrderStatus buy(@RequestBody List<String> products) {
         return logic.buy(products);
     }
+
+    @GetMapping(path = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("{"status":"UP"}");
+    }
 }
