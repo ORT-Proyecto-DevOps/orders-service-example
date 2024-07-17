@@ -1,0 +1,43 @@
+version: '3'
+services:
+  products-service:
+    build:
+      context: ./products-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    networks:
+        - app-network
+
+  payments-service:
+    build:
+      context: ./payments-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    networks:
+        - app-network
+
+  shipping-service:
+    build:
+      context: ./shipping-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+    networks:
+        - app-network
+
+  orders-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      APP_ARGS: "http://payments-service:8080 http://shipping-service:8080 http://products-service:8080"
+    networks:
+        - app-network
+
+networks:
+  app-network:
+    driver: bridge
