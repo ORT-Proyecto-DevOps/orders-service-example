@@ -175,8 +175,6 @@ jobs:
           TASK_DEFINITION_NAME="aws-ecs-orders-task-${{ inputs.ENV }}"
           TASK_DEFINITION=$(aws ecs describe-task-definition --task-definition $TASK_DEFINITION_NAME)
           NEW_TASK_DEFINITION=$(echo $TASK_DEFINITION | jq --arg IMAGE "${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.IMAGE_TAG }}" '.taskDefinition.containerDefinitions[0].image = $IMAGE')
-          APP_ARGS="http://aws-ecs-internal-lb-dev-1620666920.us-east-1.elb.amazonaws.com:8080/payments http://aws-ecs-internal-lb-dev-1620666920.us-east-1.elb.amazonaws.com:8080/shipping http://aws-ecs-internal-lb-dev-1620666920.us-east-1.elb.amazonaws.com:8080/products"
-          NEW_TASK_DEFINITION=$(echo $NEW_TASK_DEFINITION | jq --arg APP_ARGS "$APP_ARGS" '.taskDefinition.containerDefinitions[0].environment += [{"name": "APP_ARGS", "value": $APP_ARGS}]')
           NEW_TASK_DEF_REVISION=$(echo $NEW_TASK_DEFINITION | jq '.taskDefinition' | jq 'del(.status,.taskDefinitionArn,.revision,.requiresAttributes,.compatibilities,.registeredAt,.registeredBy)')
           echo "$NEW_TASK_DEF_REVISION" > new-task-def.json
           aws ecs register-task-definition --cli-input-json file://new-task-def.json
